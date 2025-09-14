@@ -101,4 +101,39 @@ public class InterviewQs {
 
 
     }
+
+//Finding sets of palindromes (length 4) in a string with mod behavior (for long strings)
+    static final long MOD = 1_000_000_007L;
+    static final int ALPH = 128;
+
+    public static long count(String s) {
+        long ans = 0;
+        long[] left = new long[ALPH];
+        long[] right = new long[ALPH];
+
+        for(int i = 0; i < s.length(); i++){
+            right[s.charAt(i)]++;
+        }
+
+        long[][] l = new long[ALPH][ALPH];
+
+        for (int k = 0; k < s.length(); k++) {
+            char ch = s.charAt(k);
+            right[ch]--;
+            long[] sb = l[ch];
+            for(int a = 0; a < ALPH; a++){
+                if(sb[a] != 0 && right[a] != 0){
+                   ans+= sb[a] * right[a];
+                }
+            }
+
+            for(int a = 0; a < ALPH; a++){
+                if(left[a] != 0){
+                    sb[a] += left[a];
+                }
+            }
+            left[ch]++;
+        }
+        return ans % MOD;
+    }
 }
