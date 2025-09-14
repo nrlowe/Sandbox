@@ -29,43 +29,34 @@ public class InterviewQs {
     }
 
 //Remove n number of duplicates from a string 
-    public static String removeNDups(String entry, int dups){
-        Stack<String> s = new Stack<String>();
-        String[] c = entry.split("");
-        for(int i = 0; i < c.length; i++){
-            s.add(c[i]);
-            if(s.size() >= dups){
-                boolean equals = true;
-                for(int x = s.size() - dups; x < s.size(); x++){
-                    if(c[i] != s.pop()){
-                        equals = false;
-                    }
-                }
-                if(equals){
-                    for(int x = 0; x < dups; x++){
-                        s.pop();
-                    }
-                }
+    public static String removeNDups(String s, int d){
+        int n = s.length();
+        int[] cnts = new int[n];
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < n; i++){
+            sb.append(s.charAt(i));
+            int j = sb.length() - 1;
+            cnts[j] = 1 + (j > 0 && sb.charAt(j - 1) == s.charAt(i) ? cnts[j - 1] : 0);
+            if (cnts[j] == d) {
+                sb.setLength(sb.length() - d);
             }
         }
-        return s.stream().toString();
+        return sb.toString();
     }
 
 //MinCore Problem
     public static int minCoresNeeded(int[] startTimes, int[] endTimes){
-        int n = startTimes.length;
-        int best = 0, current = 0;
-        int s = 0, e = 0;
         Arrays.sort(startTimes);
         Arrays.sort(endTimes);
-        while(s < n){
+        int s = 0, e = 0, best = 0, current = 0;
+        while(s < startTimes.length){
             if(startTimes[s] < endTimes[e]){
                 current++;
-                best = Math.max(best, current);
                 s++;
+                best = Math.max(best, current);
             } else {
-                e++;
                 current--;
+                e++;
             }
         }
         return best;
