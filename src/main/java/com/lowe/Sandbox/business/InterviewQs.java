@@ -1,8 +1,11 @@
 package com.lowe.Sandbox.business;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class InterviewQs {
@@ -175,24 +178,31 @@ public class InterviewQs {
 
 //DNA from DNA fragments (no overlap)
     public static boolean dnaFragments(String dna, List<String> fragments){
-        for(String s : fragments){
-            int sx = 0;
-            int start = 0;
-            for(int i = 0; i < dna.length(); i++){
-                if(sx == s.length() - 1 && s.charAt(i) == dna.charAt(i)){
-                    StringBuilder sb = new StringBuilder(dna);
-                    sb.delete(start, i);
-                    dna = sb.toString();
-                }
-                if(s.charAt(i) == dna.charAt(i) && i + (s.length() - sx) < dna.length()){
-                    sx++;
-                } else {
-                    sx = 0;
-                    start = i++;
+        int n = dna.length();
+        if (n == 0) return true;
+
+        // group fragments by first char to cut checks
+        Map<Character, List<String>> byFirst = new HashMap<>();
+        for (String f : fragments) {
+            if (f == null || f.isEmpty()) continue;
+            byFirst.computeIfAbsent(f.charAt(0), k -> new ArrayList<>()).add(f);
+        }
+
+        boolean[] dp = new boolean[n + 1];
+        dp[n] = true; // empty suffix is buildable
+
+        for (int i = n - 1; i >= 0; i--) {
+            List<String> list = byFirst.get(dna.charAt(i));
+            if (list == null) continue;
+            for (String f : list) {
+                int end = i + f.length();
+                if (end <= n && dp[end] && dna.startsWith(f, i)) {
+                    dp[i] = true;
+                    break; // no need to try more at this i
                 }
             }
         }
-        return dna.length() > 0 ? false : true;
+        return dp[0];
     }
 
 //DNA from DNA fragments (no overlap) with min amount of fragments
