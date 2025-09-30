@@ -9,8 +9,8 @@ public class InterviewQsTest {
     
     @Test
     public void testSortTree(){
-        char[] pot = {'D', 'H', 'E', 'B', 'F', 'G', 'C', 'A'};
-        char[] iot = {'D', 'B', 'H', 'E', 'A', 'F', 'C', 'G'};
+        char[] pot = {'D', 'H', 'I', 'E', 'B', 'F', 'G', 'C', 'A'};
+        char[] iot = {'D', 'B', 'H', 'E', 'I', 'A', 'F', 'C', 'G'};
         Object o = InterviewQs.sortTree(iot, pot);
         System.out.println("Test");
     }

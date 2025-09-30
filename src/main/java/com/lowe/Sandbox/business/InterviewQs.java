@@ -212,8 +212,8 @@ public class InterviewQs {
     }
 
 //Binary Tree Sort with Post/Inorder Traversal Inputs
-// D H E B F G C A - post
-// D B H E A F C G   - inorder
+// D H I E B F G C A - post
+// D B H E I A F C G   - inorder
 
     public static class BTree {
         char letter;
@@ -236,25 +236,59 @@ public class InterviewQs {
                 continue;
             }
         }
-        root.left = constructNode(iotIndex, root, iot, pot);
-        root.right = constructNode(n - 1, root, iot, pot);
+        root.left = constructLeftNode(0, iotIndex - 1, root, iot, pot);
+        root.right = constructRightNode(iotIndex, n - 2, root, iot, pot);
         return root;
     }
 
-    public static BTree constructNode(int x, BTree root, char[] iot, char[] pot) {
-        if(x - 1 >= 0 && x - 1 < pot.length && pot[x - 1] > root.letter){
-            BTree newParent = new BTree(pot[x - 1]);
+    public static BTree constructLeftNode(int min, int max, BTree root, char[] iot, char[] pot) {
+        if(min >= 0 && max < pot.length && max >= 0 && min < pot.length && pot[max] > root.letter){
+            BTree newParent = new BTree(pot[max]);
             int pIndex = 0;
-            for(int i = 0; i < x; i++){
+            for(int i = 0; i <= max; i++){
                 if(iot[i] == newParent.letter){
                     pIndex = i;
-                    continue;
+                    break;
                 }
             }
-            newParent.left = constructNode(pIndex, newParent, iot, pot);
-            newParent.right = constructNode(x - 1, newParent, iot, pot);
+            newParent.left = constructLeftNode(min, pIndex - 1, newParent, iot, pot);
+            newParent.right = constructRightNode(pIndex, max - 1, newParent, iot, pot);
             return newParent;
         }
         return null;
     }
+
+    public static BTree constructRightNode(int min, int max, BTree root, char[] iot, char[] pot) {
+        if(min >= 0 && max < pot.length && max >= 0 && min < pot.length && pot[max] > root.letter){
+            BTree newParent = new BTree(pot[max]);
+            int pIndex = 0;
+            for(int i = 0; i <= max; i++){
+                if(iot[i] == newParent.letter){
+                    pIndex = i;
+                    break;
+                }
+            }
+            newParent.right = constructRightNode(min, pIndex - 1, newParent, iot, pot);
+            newParent.left = constructLeftNode(pIndex, max - 2, newParent, iot, pot);
+            return newParent;
+        }
+        return null;
+    }
+
+    // public static BTree constructRightNode(int x, int 0, BTree root, char[] iot, char[] pot) {
+    //     if(x - 1 >= 0 && x - 1 < pot.length && pot[x - 1] > root.letter){
+    //         BTree newParent = new BTree(pot[x - 1]);
+    //         int pIndex = 0;
+    //         for(int i = 0; i < x; i++){
+    //             if(iot[i] == newParent.letter){
+    //                 pIndex = i;
+    //                 continue;
+    //             }
+    //         }
+    //         newParent.right = constructRightNode(pIndex, newParent, iot, pot);
+    //         newParent.left = constructLeftNode(x - 1, 0, newParent, iot, pot);
+    //         return newParent;
+    //     }
+    //     return null;
+    // }
 }
