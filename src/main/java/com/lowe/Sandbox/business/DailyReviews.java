@@ -221,13 +221,42 @@ public class DailyReviews {
         return optCover;
     }
 
+    public static int[] minCountAndWays(int T, int[] nums){
+        nums = Arrays.stream(nums).filter(x -> x > 0 && x < T).distinct().sorted().toArray();
+        int INF = T + 1;
+        int[] min = new int[INF];
+        Arrays.fill(min, INF);
+        min[0] = 0;
+        int[] ways = new int[INF];
+        ways[0] = 1;
+        for(int x : nums){
+            for(int i = x; i <= T; i++){
+                min[i] = Math.min(min[i], min[i - x] + 1);
+            }
+        }
+        if(min[T] > T){
+            return new int[]{-1, 0};
+        }
+        return new int[]{min[INF], ways[INF]};
+    }
+
     //Shortest Path 2-D Array
 
     //Directions Up, right, down, left
     private final int[] dx = {0, 1, 0, -1};
     private final int[] dy = {-1, 0, 1, 0};
 
+    public class Cell {
+        int x, y, cost;
+        Cell(int x, int y, int cost){
+            this.x = x;
+            this.y = y;
+            this.cost = cost;
+        }
+    }
+
     public int shortestPath(int[][] grid) {
+        
         return -1;
     }
     

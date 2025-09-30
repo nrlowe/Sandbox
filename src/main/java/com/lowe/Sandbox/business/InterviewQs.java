@@ -210,4 +210,51 @@ public class InterviewQs {
 
         return false;
     }
+
+//Binary Tree Sort with Post/Inorder Traversal Inputs
+// D H E B F G C A - post
+// D B H E A F C G   - inorder
+
+    public static class BTree {
+        char letter;
+
+        BTree left;
+        BTree right;
+
+        BTree(char n){
+            this.letter = n;
+        }
+
+    }
+    public static BTree sortTree(char[] iot, char[] pot){
+        int n = pot.length;
+        BTree root =  new BTree(pot[n - 1]);
+        int iotIndex = 0;
+        for(int i = 0; i < n; i++){
+            if(iot[i] == root.letter){
+                iotIndex = i;
+                continue;
+            }
+        }
+        root.left = constructNode(iotIndex, root, iot, pot);
+        root.right = constructNode(n - 1, root, iot, pot);
+        return root;
+    }
+
+    public static BTree constructNode(int x, BTree root, char[] iot, char[] pot) {
+        if(x - 1 >= 0 && x - 1 < pot.length && pot[x - 1] > root.letter){
+            BTree newParent = new BTree(pot[x - 1]);
+            int pIndex = 0;
+            for(int i = 0; i < x; i++){
+                if(iot[i] == newParent.letter){
+                    pIndex = i;
+                    continue;
+                }
+            }
+            newParent.left = constructNode(pIndex, newParent, iot, pot);
+            newParent.right = constructNode(x - 1, newParent, iot, pot);
+            return newParent;
+        }
+        return null;
+    }
 }
